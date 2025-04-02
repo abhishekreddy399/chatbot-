@@ -3,13 +3,1348 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Static Website</title>
-    <link rel="stylesheet" href="styles.css">
+    <title>OrderTrack AI - Smart Order Tracking Assistant</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #4361ee;
+            --secondary: #3f37c9;
+            --accent: #4cc9f0;
+            --success: #4CAF50;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --gray: #6c757d;
+            --white: #ffffff;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--light);
+            color: var(--dark);
+            line-height: 1.6;
+        }
+
+        /* Navigation */
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 10%;
+            background-color: var(--white);
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .logo i {
+            color: var(--accent);
+        }
+
+        .logo span {
+            color: var(--secondary);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 30px;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--dark);
+            font-weight: 500;
+            transition: var(--transition);
+            position: relative;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+
+        .nav-links a:after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -5px;
+            left: 0;
+            background-color: var(--primary);
+            transition: var(--transition);
+        }
+
+        .nav-links a:hover:after {
+            width: 100%;
+        }
+
+        .try-now {
+            background-color: var(--primary);
+            color: var(--white);
+            padding: 10px 25px;
+            border-radius: 30px;
+            font-weight: 600;
+            transition: var(--transition);
+            border: 2px solid var(--primary);
+        }
+
+        .try-now:hover {
+            background-color: transparent;
+            color: var(--primary);
+        }
+
+        /* Hero Section */
+        .hero {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 100px 20px;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4e8eb 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -50px;
+            right: -50px;
+            width: 300px;
+            height: 300px;
+            background-color: rgba(76, 201, 240, 0.1);
+            border-radius: 50%;
+            z-index: 0;
+        }
+
+        .hero::after {
+            content: '';
+            position: absolute;
+            bottom: -100px;
+            left: -100px;
+            width: 400px;
+            height: 400px;
+            background-color: rgba(67, 97, 238, 0.1);
+            border-radius: 50%;
+            z-index: 0;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+            max-width: 800px;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 20px;
+            color: var(--primary);
+            line-height: 1.2;
+            animation: fadeInUp 1s ease;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            margin-bottom: 40px;
+            color: var(--gray);
+            animation: fadeInUp 1s ease 0.2s forwards;
+            opacity: 0;
+        }
+
+        .cta-button {
+            background-color: var(--success);
+            color: var(--white);
+            border: none;
+            padding: 15px 40px;
+            font-size: 1.1rem;
+            border-radius: 30px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: var(--transition);
+            box-shadow: 0 4px 15px rgba(76, 175, 80, 0.3);
+            animation: fadeInUp 1s ease 0.4s forwards;
+            opacity: 0;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(76, 175, 80, 0.4);
+            background-color: #3e8e41;
+        }
+
+        /* Chatbot Section */
+        .chatbot-container {
+            display: none;
+            max-width: 800px;
+            margin: 60px auto;
+            border-radius: 15px;
+            box-shadow: var(--shadow);
+            overflow: hidden;
+            transform: scale(0.95);
+            opacity: 0;
+            transition: var(--transition);
+            background-color: var(--white);
+        }
+
+        .chatbot-container.visible {
+            transform: scale(1);
+            opacity: 1;
+        }
+
+        .chatbot-header {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: var(--white);
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .chatbot-header i {
+            font-size: 1.5rem;
+        }
+
+        .chatbot-header h2 {
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+
+        .chatbot-messages {
+            height: 400px;
+            overflow-y: auto;
+            padding: 20px;
+            background-color: #f5f7fb;
+            scroll-behavior: smooth;
+        }
+
+        .message {
+            margin-bottom: 15px;
+            padding: 12px 18px;
+            border-radius: 18px;
+            max-width: 80%;
+            position: relative;
+            animation: fadeIn 0.3s ease;
+            line-height: 1.5;
+            font-size: 0.95rem;
+        }
+
+        .bot-message {
+            background-color: var(--white);
+            color: var(--dark);
+            align-self: flex-start;
+            margin-right: auto;
+            box-shadow: var(--shadow);
+            border-top-left-radius: 5px;
+        }
+
+        .bot-message:before {
+            content: '';
+            position: absolute;
+            left: -10px;
+            top: 0;
+            width: 0;
+            height: 0;
+            border: 10px solid transparent;
+            border-right-color: var(--white);
+            border-left: 0;
+            border-top: 0;
+            margin-top: 0;
+        }
+
+        .user-message {
+            background-color: var(--primary);
+            color: var(--white);
+            align-self: flex-end;
+            margin-left: auto;
+            border-top-right-radius: 5px;
+        }
+
+        .user-message:before {
+            content: '';
+            position: absolute;
+            right: -10px;
+            top: 0;
+            width: 0;
+            height: 0;
+            border: 10px solid transparent;
+            border-left-color: var(--primary);
+            border-right: 0;
+            border-top: 0;
+            margin-top: 0;
+        }
+
+        .chatbot-input-container {
+            display: flex;
+            padding: 15px;
+            background-color: var(--white);
+            border-top: 1px solid #eee;
+        }
+
+        .chatbot-input {
+            flex: 1;
+            padding: 12px 20px;
+            border: 1px solid #ddd;
+            border-radius: 30px;
+            font-size: 1rem;
+            transition: var(--transition);
+            outline: none;
+        }
+
+        .chatbot-input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.2);
+        }
+
+        .send-button {
+            background-color: var(--success);
+            color: var(--white);
+            border: none;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-weight: 600;
+            margin-left: 10px;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .send-button:hover {
+            background-color: #3e8e41;
+            transform: scale(1.05);
+        }
+
+        .typing-indicator {
+            display: flex;
+            padding: 10px 15px;
+            background-color: var(--white);
+            border-radius: 18px;
+            width: fit-content;
+            margin-bottom: 15px;
+            box-shadow: var(--shadow);
+            border-top-left-radius: 5px;
+        }
+
+        .typing-dot {
+            width: 8px;
+            height: 8px;
+            background-color: var(--gray);
+            border-radius: 50%;
+            margin: 0 3px;
+            animation: typingAnimation 1.4s infinite ease-in-out;
+        }
+
+        .typing-dot:nth-child(1) {
+            animation-delay: 0s;
+        }
+
+        .typing-dot:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .typing-dot:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+
+        /* Order Status Card */
+        .order-card {
+            background-color: var(--white);
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 15px;
+            box-shadow: var(--shadow);
+            border-left: 4px solid var(--primary);
+        }
+
+        .order-card h3 {
+            color: var(--primary);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .order-card p {
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .order-card i {
+            width: 20px;
+            color: var(--gray);
+        }
+
+        .progress-container {
+            margin-top: 15px;
+        }
+
+        .progress-steps {
+            display: flex;
+            justify-content: space-between;
+            position: relative;
+            margin-bottom: 10px;
+        }
+
+        .progress-steps:before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background-color: #e9ecef;
+            z-index: 1;
+        }
+
+        .progress-bar {
+            position: absolute;
+            top: 50%;
+            left: 0;
+            height: 2px;
+            background-color: var(--success);
+            z-index: 2;
+            transition: width 0.5s ease;
+        }
+
+        .step {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background-color: #e9ecef;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            z-index: 3;
+            color: var(--gray);
+            font-size: 0.8rem;
+        }
+
+        .step.active {
+            background-color: var(--success);
+            color: var(--white);
+        }
+
+        .step.completed {
+            background-color: var(--success);
+            color: var(--white);
+        }
+
+        .step-label {
+            position: absolute;
+            top: 35px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 0.7rem;
+            color: var(--gray);
+            white-space: nowrap;
+        }
+
+        /* Features Section */
+        .features {
+            padding: 100px 10%;
+            text-align: center;
+            background-color: var(--white);
+        }
+
+        .section-header {
+            margin-bottom: 60px;
+        }
+
+        .section-header h2 {
+            font-size: 2.5rem;
+            color: var(--primary);
+            margin-bottom: 15px;
+        }
+
+        .section-header p {
+            color: var(--gray);
+            max-width: 700px;
+            margin: 0 auto;
+            font-size: 1.1rem;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+        }
+
+        .feature-card {
+            padding: 30px;
+            border-radius: 15px;
+            background-color: var(--light);
+            transition: var(--transition);
+            text-align: left;
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .feature-card:after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+        }
+
+        .feature-icon {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            color: var(--primary);
+        }
+
+        .feature-card h3 {
+            margin-bottom: 15px;
+            color: var(--dark);
+            font-size: 1.3rem;
+        }
+
+        .feature-card p {
+            color: var(--gray);
+            font-size: 0.95rem;
+        }
+
+        /* Testimonials */
+        .testimonials {
+            padding: 100px 10%;
+            background-color: var(--light);
+            text-align: center;
+        }
+
+        .testimonial-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 50px;
+        }
+
+        .testimonial-card {
+            background-color: var(--white);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: var(--shadow);
+            text-align: left;
+            position: relative;
+        }
+
+        .testimonial-card:before {
+            content: '"';
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            font-size: 5rem;
+            color: rgba(67, 97, 238, 0.1);
+            font-family: serif;
+            line-height: 1;
+        }
+
+        .testimonial-content {
+            margin-bottom: 20px;
+            font-style: italic;
+            color: var(--dark);
+            position: relative;
+            z-index: 1;
+        }
+
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .author-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background-color: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--white);
+            font-weight: bold;
+        }
+
+        .author-info h4 {
+            color: var(--dark);
+            margin-bottom: 5px;
+        }
+
+        .author-info p {
+            color: var(--gray);
+            font-size: 0.8rem;
+        }
+
+        /* FAQ Section */
+        .faq {
+            padding: 100px 10%;
+            background-color: var(--white);
+        }
+
+        .faq-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .faq-item {
+            margin-bottom: 15px;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+        }
+
+        .faq-question {
+            background-color: var(--primary);
+            color: var(--white);
+            padding: 20px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 600;
+            transition: var(--transition);
+        }
+
+        .faq-question:hover {
+            background-color: var(--secondary);
+        }
+
+        .faq-question i {
+            transition: var(--transition);
+        }
+
+        .faq-answer {
+            background-color: var(--white);
+            padding: 0;
+            max-height: 0;
+            overflow: hidden;
+            transition: var(--transition);
+        }
+
+        .faq-item.active .faq-question {
+            background-color: var(--secondary);
+        }
+
+        .faq-item.active .faq-question i {
+            transform: rotate(180deg);
+        }
+
+        .faq-item.active .faq-answer {
+            padding: 20px;
+            max-height: 500px;
+        }
+
+        /* Footer */
+        footer {
+            background-color: var(--dark);
+            color: var(--white);
+            padding: 60px 10% 30px;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .footer-column h3 {
+            color: var(--white);
+            margin-bottom: 20px;
+            font-size: 1.2rem;
+            position: relative;
+            padding-bottom: 10px;
+        }
+
+        .footer-column h3:after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 40px;
+            height: 2px;
+            background-color: var(--accent);
+        }
+
+        .footer-column ul {
+            list-style: none;
+        }
+
+        .footer-column li {
+            margin-bottom: 10px;
+        }
+
+        .footer-column a {
+            color: #adb5bd;
+            text-decoration: none;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .footer-column a:hover {
+            color: var(--accent);
+            padding-left: 5px;
+        }
+
+        .footer-column a i {
+            width: 20px;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .social-links a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: rgba(255, 255, 255, 0.1);
+            color: var(--white);
+            transition: var(--transition);
+        }
+
+        .social-links a:hover {
+            background-color: var(--accent);
+            transform: translateY(-3px);
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 30px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: #adb5bd;
+            font-size: 0.9rem;
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes typingAnimation {
+            0%, 60%, 100% {
+                transform: translateY(0);
+            }
+            30% {
+                transform: translateY(-5px);
+            }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 992px) {
+            nav {
+                padding: 15px 5%;
+            }
+            
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+            
+            .section-header h2 {
+                font-size: 2rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            nav {
+                flex-direction: column;
+                gap: 15px;
+                padding: 15px;
+            }
+
+            .nav-links {
+                flex-direction: column;
+                gap: 10px;
+                align-items: center;
+            }
+
+            .hero {
+                padding: 80px 20px;
+            }
+
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .hero p {
+                font-size: 1rem;
+            }
+
+            .chatbot-container {
+                margin: 30px 15px;
+            }
+
+            .features, .testimonials, .faq {
+                padding: 60px 20px;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .message {
+                max-width: 90%;
+                font-size: 0.9rem;
+                padding: 10px 15px;
+            }
+            
+            .chatbot-header h2 {
+                font-size: 1.2rem;
+            }
+            
+            .feature-card {
+                padding: 20px;
+            }
+            
+            .feature-icon {
+                font-size: 2rem;
+            }
+        }
+    </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Welcome to My Static Website</h1>
-        <p>This website is hosted on AWS S3!</p>
-    </div>
+    <!-- Navigation -->
+    <nav>
+        <div class="logo">
+            <i class="fas fa-box-open"></i>
+            <span>OrderTrack</span> AI
+        </div>
+        <div class="nav-links">
+            <a href="#features">Features</a>
+            <a href="#how-it-works">How It Works</a>
+            <a href="#testimonials">Testimonials</a>
+            <a href="#" class="try-now" id="nav-try-now">Try Now</a>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1>Smart Order Tracking Made Simple</h1>
+            <p>Our AI-powered assistant provides real-time updates, delivery predictions, and instant support for all your orders in one place.</p>
+            <button class="cta-button" id="hero-cta">
+                <i class="fas fa-rocket"></i> Track My Order
+            </button>
+        </div>
+    </section>
+
+    <!-- Chatbot Section -->
+    <section class="chatbot-container" id="chatbot-container">
+        <div class="chatbot-header">
+            <i class="fas fa-robot"></i>
+            <h2>OrderTrack Assistant</h2>
+        </div>
+        <div class="chatbot-messages" id="chatbot-messages">
+            <div class="message bot-message">
+                <strong>Hello! I'm OrderTrack AI, your personal order assistant.</strong><br><br>
+                I can help you track orders, check delivery status, and answer any questions about your purchases.<br><br>
+                You can ask me things like:<br>
+                • "Where is my order #12345?"<br>
+                • "Track my recent purchase for John Smith"<br>
+                • "When will my package arrive?"
+            </div>
+        </div>
+        <div class="chatbot-input-container">
+            <input type="text" class="chatbot-input" id="user-input" placeholder="Type your order number or question..." autofocus>
+            <button class="send-button" id="send-button">
+                <i class="fas fa-paper-plane"></i>
+            </button>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features" id="features">
+        <div class="section-header">
+            <h2>Why Choose OrderTrack AI?</h2>
+            <p>Our platform combines advanced AI technology with user-friendly features to revolutionize your order tracking experience.</p>
+        </div>
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-bolt"></i>
+                </div>
+                <h3>Instant Updates</h3>
+                <p>Get real-time notifications about your order status, shipping updates, and delivery confirmations.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-map-marker-alt"></i>
+                </div>
+                <h3>Live Tracking</h3>
+                <p>Visualize your package's journey with interactive maps and detailed location history.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-robot"></i>
+                </div>
+                <h3>AI Predictions</h3>
+                <p>Our smart algorithms predict delivery times with 95% accuracy based on current conditions.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-store"></i>
+                </div>
+                <h3>Multi-Store</h3>
+                <p>Track orders from all your favorite retailers in one centralized dashboard.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-headset"></i>
+                </div>
+                <h3>24/7 Support</h3>
+                <p>Our virtual assistant is always available to answer questions and resolve issues instantly.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-chart-line"></i>
+                </div>
+                <h3>Analytics</h3>
+                <p>View your order history, spending patterns, and delivery performance over time.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section class="testimonials" id="testimonials">
+        <div class="section-header">
+            <h2>What Our Users Say</h2>
+            <p>Thousands of customers trust OrderTrack AI to manage their orders and deliveries.</p>
+        </div>
+        <div class="testimonial-grid">
+            <div class="testimonial-card">
+                <div class="testimonial-content">
+                    OrderTrack AI has completely changed how I manage my online shopping. The predictive delivery times are scarily accurate, and I love getting real-time updates without having to check multiple apps.
+                </div>
+                <div class="testimonial-author">
+                    <div class="author-avatar">SD</div>
+                    <div class="author-info">
+                        <h4>Sarah Davis</h4>
+                        <p>Frequent Online Shopper</p>
+                    </div>
+                </div>
+            </div>
+            <div class="testimonial-card">
+                <div class="testimonial-content">
+                    As a small business owner, keeping track of inventory orders was a nightmare. With OrderTrack AI, I can monitor all my shipments in one place and get alerts before delays happen. It's been a game-changer!
+                </div>
+                <div class="testimonial-author">
+                    <div class="author-avatar">MJ</div>
+                    <div class="author-info">
+                        <h4>Michael Johnson</h4>
+                        <p>Small Business Owner</p>
+                    </div>
+                </div>
+            </div>
+            <div class="testimonial-card">
+                <div class="testimonial-content">
+                    The AI assistant is incredibly helpful when I have questions about my orders. It understands natural language and provides accurate information instantly. Much better than waiting on hold with customer service!
+                </div>
+                <div class="testimonial-author">
+                    <div class="author-avatar">EP</div>
+                    <div class="author-info">
+                        <h4>Emily Parker</h4>
+                        <p>Tech Enthusiast</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section class="faq" id="how-it-works">
+        <div class="section-header">
+            <h2>Frequently Asked Questions</h2>
+            <p>Find answers to common questions about OrderTrack AI.</p>
+        </div>
+        <div class="faq-container">
+            <div class="faq-item">
+                <div class="faq-question">
+                    How does OrderTrack AI work?
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="faq-answer">
+                    OrderTrack AI connects to your email and shopping accounts to automatically detect orders. Our AI then tracks each package across all carriers, provides real-time updates, and can answer any questions you have about your deliveries through natural conversation.
+                </div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-question">
+                    Is my data secure?
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="faq-answer">
+                    Absolutely. We use bank-level encryption and never store your payment information. Your data is only used to provide order tracking services and is never shared with third parties. You can disconnect accounts at any time.
+                </div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-question">
+                    Which retailers and carriers do you support?
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="faq-answer">
+                    We support all major retailers (Amazon, Walmart, Target, etc.) and carriers (UPS, FedEx, USPS, DHL). Our system is constantly updated to add new stores and shipping services. If we don't support a retailer yet, you can manually add tracking numbers.
+                </div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-question">
+                    Can I track orders from multiple email addresses?
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="faq-answer">
+                    Yes! You can connect multiple email accounts to your OrderTrack AI profile. The system will automatically scan all connected accounts for order confirmations and tracking information, consolidating everything in one dashboard.
+                </div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-question">
+                    How accurate are the delivery predictions?
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="faq-answer">
+                    Our AI analyzes millions of data points including carrier performance, weather conditions, and historical delivery times to predict your delivery window. Currently, our predictions are accurate within 2 hours for 92% of deliveries.
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-grid">
+            <div class="footer-column">
+                <h3>OrderTrack AI</h3>
+                <p>The smartest way to track all your online orders in one place with AI-powered assistance and real-time updates.</p>
+                <div class="social-links">
+                    <a href="#"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                </div>
+            </div>
+            <div class="footer-column">
+                <h3>Quick Links</h3>
+                <ul>
+                    <li><a href="#"><i class="fas fa-chevron-right"></i> Home</a></li>
+                    <li><a href="#features"><i class="fas fa-chevron-right"></i> Features</a></li>
+                    <li><a href="#how-it-works"><i class="fas fa-chevron-right"></i> How It Works</a></li>
+                    <li><a href="#testimonials"><i class="fas fa-chevron-right"></i> Testimonials</a></li>
+                    <li><a href="#"><i class="fas fa-chevron-right"></i> Try Now</a></li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h3>Support</h3>
+                <ul>
+                    <li><a href="#"><i class="fas fa-chevron-right"></i> Help Center</a></li>
+                    <li><a href="#"><i class="fas fa-chevron-right"></i> Contact Us</a></li>
+                    <li><a href="#"><i class="fas fa-chevron-right"></i> Privacy Policy</a></li>
+                    <li><a href="#"><i class="fas fa-chevron-right"></i> Terms of Service</a></li>
+                    <li><a href="#"><i class="fas fa-chevron-right"></i> FAQ</a></li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h3>Contact</h3>
+                <ul>
+                    <li><a href="#"><i class="fas fa-map-marker-alt"></i> 123 Tech Street, San Francisco, CA</a></li>
+                    <li><a href="mailto:hello@ordertrack.ai"><i class="fas fa-envelope"></i> hello@ordertrack.ai</a></li>
+                    <li><a href="tel:+18005551234"><i class="fas fa-phone"></i> (800) 555-1234</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2023 OrderTrack AI. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        // DOM Elements
+        const heroCta = document.getElementById('hero-cta');
+        const navTryNow = document.getElementById('nav-try-now');
+        const chatbotContainer = document.getElementById('chatbot-container');
+        const chatMessages = document.getElementById('chatbot-messages');
+        const userInput = document.getElementById('user-input');
+        const sendButton = document.getElementById('send-button');
+        const faqItems = document.querySelectorAll('.faq-item');
+
+        // Show chatbot when CTA buttons are clicked
+        heroCta.addEventListener('click', showChatbot);
+        navTryNow.addEventListener('click', showChatbot);
+
+        function showChatbot(e) {
+            e.preventDefault();
+            chatbotContainer.style.display = 'block';
+            setTimeout(() => {
+                chatbotContainer.classList.add('visible');
+            }, 10);
+            // Scroll to chatbot
+            chatbotContainer.scrollIntoView({ behavior: 'smooth' });
+            userInput.focus();
+        }
+
+        // FAQ Accordion
+        faqItems.forEach(item => {
+            const question = item.querySelector('.faq-question');
+            question.addEventListener('click', () => {
+                item.classList.toggle('active');
+            });
+        });
+
+        // Sample order data (in a real app, this would come from a database/API)
+        const sampleOrders = {
+            '12345': {
+                customer: 'John Smith',
+                status: 'Out for Delivery',
+                items: ['Wireless Headphones', 'USB-C Cable'],
+                carrier: 'UPS',
+                trackingNumber: '1Z999AA10123456784',
+                estimatedDelivery: 'Today by 8pm',
+                progress: 90,
+                steps: ['Ordered', 'Processed', 'Shipped', 'Out for Delivery', 'Delivered'],
+                currentStep: 3,
+                lastUpdate: 'Package is on the delivery truck',
+                deliveryAddress: '123 Main St, Anytown, CA 90210'
+            },
+            '67890': {
+                customer: 'Sarah Johnson',
+                status: 'In Transit',
+                items: ['Smart Watch', 'Screen Protector'],
+                carrier: 'FedEx',
+                trackingNumber: '123456789012',
+                estimatedDelivery: 'April 12, 2023 by end of day',
+                progress: 60,
+                steps: ['Ordered', 'Processed', 'Shipped', 'In Transit', 'Out for Delivery', 'Delivered'],
+                currentStep: 3,
+                lastUpdate: 'Departed FedEx location - LOS ANGELES, CA',
+                deliveryAddress: '456 Oak Ave, Somewhere, CA 90211'
+            },
+            'ABCDE': {
+                customer: 'Michael Brown',
+                status: 'Delivered',
+                items: ['Laptop Backpack', 'Wireless Mouse'],
+                carrier: 'USPS',
+                trackingNumber: '9200199999977453249892',
+                estimatedDelivery: 'Delivered on April 5, 2023 at 2:30pm',
+                progress: 100,
+                steps: ['Ordered', 'Processed', 'Shipped', 'In Transit', 'Out for Delivery', 'Delivered'],
+                currentStep: 5,
+                lastUpdate: 'Delivered, left at front door',
+                deliveryAddress: '789 Pine Rd, Nowhere, CA 90212'
+            }
+        };
+
+        // Handle user input
+        sendButton.addEventListener('click', handleUserInput);
+        userInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                handleUserInput();
+            }
+        });
+
+        function handleUserInput() {
+            const inputText = userInput.value.trim();
+            if (!inputText) return;
+
+            // Add user message to chat
+            addMessage(inputText, 'user');
+
+            // Clear input
+            userInput.value = '';
+
+            // Show typing indicator
+            showTypingIndicator();
+
+            // Process input after a short delay to simulate thinking
+            setTimeout(() => {
+                processOrderRequest(inputText);
+            }, 1000 + Math.random() * 1000); // Random delay between 1-2 seconds
+        }
+
+        function addMessage(text, sender) {
+            const messageDiv = document.createElement('div');
+            messageDiv.classList.add('message');
+            messageDiv.classList.add(sender === 'user' ? 'user-message' : 'bot-message');
+            messageDiv.innerHTML = text; // Using innerHTML to allow basic formatting
+            chatMessages.appendChild(messageDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        function showTypingIndicator() {
+            const typingDiv = document.createElement('div');
+            typingDiv.classList.add('typing-indicator');
+            typingDiv.id = 'typing-indicator';
+            typingDiv.innerHTML = `
+                <div class="typing-dot"></div>
+                <div class="typing-dot"></div>
+                <div class="typing-dot"></div>
+            `;
+            chatMessages.appendChild(typingDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        function hideTypingIndicator() {
+            const typingIndicator = document.getElementById('typing-indicator');
+            if (typingIndicator) {
+                typingIndicator.remove();
+            }
+        }
+
+        function createOrderCard(order, orderNumber) {
+            return `
+                <div class="order-card">
+                    <h3><i class="fas fa-box"></i> Order #${orderNumber}</h3>
+                    <p><i class="fas fa-user"></i> ${order.customer}</p>
+                    <p><i class="fas fa-truck"></i> Carrier: ${order.carrier}</p>
+                    <p><i class="fas fa-barcode"></i> Tracking: ${order.trackingNumber}</p>
+                    <p><i class="fas fa-clock"></i> Status: <strong>${order.status}</strong></p>
+                    <p><i class="fas fa-map-pin"></i> Shipping to: ${order.deliveryAddress}</p>
+                    <p><i class="fas fa-info-circle"></i> Last Update: ${order.lastUpdate}</p>
+                    
+                    <div class="progress-container">
+                        <div class="progress-steps">
+                            <div class="progress-bar" style="width: ${order.progress}%"></div>
+                            ${order.steps.map((step, index) => `
+                                <div class="step ${index < order.currentStep ? 'completed' : ''} ${index === order.currentStep ? 'active' : ''}">
+                                    ${index + 1}
+                                    <span class="step-label">${step}</span>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function processOrderRequest(input) {
+            // Remove typing indicator
+            hideTypingIndicator();
+
+            // Convert input to lowercase for easier matching
+            const lowerInput = input.toLowerCase();
+
+            // Check for greetings
+            if (lowerInput.includes('hi') || lowerInput.includes('hello') || lowerInput.includes('hey')) {
+                addMessage("Hello! How can I help you with your order tracking today?", 'bot');
+                return;
+            }
+
+            // Check for thanks
+            if (lowerInput.includes('thank') || lowerInput.includes('thanks')) {
+                addMessage("You're welcome! Is there anything else I can help you with?", 'bot');
+                return;
+            }
+
+            // Check if input matches an order number pattern
+            const orderNumberMatch = input.match(/#?([A-Z0-9]{5,})/i);
+            
+            if (orderNumberMatch) {
+                const orderNumber = orderNumberMatch[1].toUpperCase();
+                if (sampleOrders[orderNumber]) {
+                    const order = sampleOrders[orderNumber];
+                    let response = `Here's the latest information for order <strong>#${orderNumber}</strong>:`;
+                    response += createOrderCard(order, orderNumber);
+                    addMessage(response, 'bot');
+                } else {
+                    addMessage(`I couldn't find order <strong>#${orderNumber}</strong>. Please check the number and try again.`, 'bot');
+                }
+            } 
+            // Check if input contains a customer name
+            else if (lowerInput.includes('john') || lowerInput.includes('smith')) {
+                const order = sampleOrders['12345'];
+                let response = `I found an order for <strong>John Smith</strong>:`;
+                response += createOrderCard(order, '12345');
+                addMessage(response, 'bot');
+            } 
+            else if (lowerInput.includes('sarah') || lowerInput.includes('johnson')) {
+                const order = sampleOrders['67890'];
+                let response = `I found an order for <strong>Sarah Johnson</strong>:`;
+                response += createOrderCard(order, '67890');
+                addMessage(response, 'bot');
+            }
+            else if (lowerInput.includes('michael') || lowerInput.includes('brown')) {
+                const order = sampleOrders['ABCDE'];
+                let response = `I found an order for <strong>Michael Brown</strong>:`;
+                response += createOrderCard(order, 'ABCDE');
+                addMessage(response, 'bot');
+            }
+            // Check for general tracking questions
+            else if (lowerInput.includes('track') || lowerInput.includes('where is') || lowerInput.includes('status')) {
+                addMessage("To track your order, please provide either:<br><br>" +
+                    "• Your order number (e.g., #12345)<br>" +
+                    "• The name on the order (e.g., 'Order for John Smith')<br><br>" +
+                    "You can also ask me about estimated delivery times or shipping updates.", 'bot');
+            }
+            // Check for delivery time questions
+            else if (lowerInput.includes('when') && (lowerInput.includes('arrive') || lowerInput.includes('deliver'))) {
+                addMessage("I can check the estimated delivery time if you provide your order number or the name on the order.", 'bot');
+            }
+            // Default response
+            else {
+                addMessage("I'm here to help you track orders and answer delivery questions. You can ask me things like:<br><br>" +
+                    "• \"Where is my order #12345?\"<br>" +
+                    "• \"Track my order for John Smith\"<br>" +
+                    "• \"When will my package arrive?\"<br><br>" +
+                    "What would you like to know about your order?", 'bot');
+            }
+        }
+
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+    </script>
 </body>
 </html>
